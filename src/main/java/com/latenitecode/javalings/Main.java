@@ -4,11 +4,12 @@ package com.latenitecode.javalings;
 public class Main {
 
     public static void main(String[] args) {
-        Args cli = Args.parse(args);
+        Args cli = Args.parse("v20230521", args);
         if (cli.empty()) {
             System.out.println(
                     String.join(
                         "\n", 
+                        "",
                         "Hello and",
                         "       welcome to...                         ",
                         "    _                   _ _                  ",
@@ -50,6 +51,10 @@ public class Main {
         }
         if (cli.help()) {
             System.out.println(cli);
+            System.exit(0);
+        }
+        if (cli.version()) {
+            System.out.println(cli.getVersion());
             System.exit(0);
         }
     }

@@ -3,28 +3,42 @@ package com.latenitecode.javalings;
 /** Javalings CLI tool */
 public class Args {
 
-    public static Args parse(String[] args) {
-        boolean help = false;
+    public static Args parse(String version, String[] args) {
+        Option option = Option.None;
         for (String arg : args) {
+            if (option != Option.None) {
+                continue;
+            }
             if (arg.equals("-h") || arg.equals("-help") || arg.equals("--help")) {
-                help = true;
+                option = Option.Help;
+                continue;
+            }
+            if (arg.equals("-v") || arg.equals("--version")) {
+                option = Option.Version;
+                continue;
             }
         }
-        return new Args(help);
+        return new Args(version, option);
     }
 
-    private boolean help;
+    private Option option;
+    private String version;
 
-    private Args(boolean help) {
-        this.help = help;
+    private Args(String version, Option option) {
+        this.version = version;
+        this.option = option;
+    }
+
+    public String getVersion() {
+        return this.version;
     }
 
     public boolean empty() {
-        return !this.help;
+        return this.option == Option.None;
     }
 
     public boolean help() {
-        return this.help;
+        return this.option == Option.Help;
     }
 
     public String toString() {
@@ -37,5 +51,9 @@ public class Args {
                 "Options:",
                 String.format("%-20s %s", "  -h, -help, --help", "display usage information")
             );
+    }
+
+    public boolean version() {
+        return this.option == Option.Version;
     }
 }
