@@ -1,0 +1,32 @@
+#!/bin/bash
+
+if [[ $(basename $PWD) != "javalings" ]]
+then
+    echo "Hello and"
+    echo "       welcome to...                         "
+    echo "    _                   _ _                  "
+    echo "   (_) __ _ _   _  __ _| (_)_ __   __ _ ___  "
+    echo "   | |/ _\` | | | |/ _\` | | | '_ \\ / _\` / __| "
+    echo "   | | (_| | |_| | (_| | | | | | | (_| \\__ \\ "
+    echo " __| |\\__,_|\\___/ \\__,_|_|_|_| |_|\\__, |___/ "
+    echo "|___/                             |___/      "
+    echo ""
+    if [[ $(which javalings) != "" ]]
+    then
+        echo "$(which javalings) must be run from the javalings directory"
+    else
+        echo "javalings must be run from the javalings directory"
+    fi
+    echo "Try \`cd <path-to>/javalings\`!"
+    exit -1
+fi
+
+javac \
+    -d "target" \
+    -cp "src/main/java" \
+    src/main/java/com/latenitecode/javalings/Main.java &&\
+java \
+    -cp "target" \
+    com.latenitecode.javalings.Main \
+    $@
+
