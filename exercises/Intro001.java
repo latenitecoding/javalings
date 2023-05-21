@@ -17,6 +17,7 @@
 public class Intro001 {
 
     public static void main(String[] args) {
+        System.out.println("");
         System.out.println("Hello and");
         System.out.println("       welcome to...                         ");
         System.out.println("    _                   _ _                  ");
