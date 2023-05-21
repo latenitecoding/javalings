@@ -3,29 +3,48 @@ package com.latenitecode.javalings;
 /** Javalings CLI tool */
 public class Args {
 
+    private static void assertNoCommand(Command command) {
+        if (command != Command.None) {
+            throw new RuntimeException("Cannot have two commands");
+        }
+    }
+
+    private static void assertNoOption(Option option) {
+        if (option != Option.None) {
+            throw new RuntimeException("Cannot have two options");
+        }
+    }
+
     public static Args parse(String version, String[] args) {
+        Command command = Command.None;
         Option option = Option.None;
         for (String arg : args) {
-            if (option != Option.None) {
+            if (arg.equals("list")) {
+                assertNoCommand(command);
+                command = Command.List;
                 continue;
             }
             if (arg.equals("-h") || arg.equals("-help") || arg.equals("--help")) {
+                assertNoOption(option);
                 option = Option.Help;
                 continue;
             }
             if (arg.equals("-v") || arg.equals("--version")) {
+                assertNoOption(option);
                 option = Option.Version;
                 continue;
             }
         }
-        return new Args(version, option);
+        return new Args(version, command, option);
     }
 
+    private Command command;
     private Option option;
     private String version;
 
-    private Args(String version, Option option) {
+    private Args(String version, Command command, Option option) {
         this.version = version;
+        this.command = command;
         this.option = option;
     }
 
@@ -34,7 +53,7 @@ public class Args {
     }
 
     public boolean empty() {
-        return this.option == Option.None;
+        return this.command == Command.None && this.option == Option.None;
     }
 
     public boolean help() {
@@ -55,5 +74,16 @@ public class Args {
 
     public boolean version() {
         return this.option == Option.Version;
+    }
+
+    public static enum Command {
+        None,
+        List
+    }
+
+    public static enum Option {
+        Help,
+        None,
+        Version
     }
 }
