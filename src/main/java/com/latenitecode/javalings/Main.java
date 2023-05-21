@@ -48,5 +48,9 @@ public class Main {
                 );
             System.exit(0);
         }
+        if (cli.help()) {
+            System.out.println(cli);
+            System.exit(0);
+        }
     }
 }
