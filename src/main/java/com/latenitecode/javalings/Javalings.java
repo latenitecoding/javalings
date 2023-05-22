@@ -113,6 +113,15 @@ public class Javalings {
     }
   }
 
+  public static Result hint(String name) {
+    try {
+      return new Result(true, Files.readString(Path.of(String.format(".hints/%s.hint", name))));
+    } catch (IOException e) {
+      System.err.println(e);
+      return new Result(false, String.format("Cannot read hint for %s", name));
+    }
+  }
+
   public static Result list() {
     return Javalings.list(true, true, 'a');
   }

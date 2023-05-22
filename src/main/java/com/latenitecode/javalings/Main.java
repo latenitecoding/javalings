@@ -58,6 +58,10 @@ public class Main {
       System.exit(0);
     }
     Javalings.Result res = null;
+    if (cli.hint()) {
+      res = Javalings.hint(cli.getArgs().iterator().next());
+      System.out.println(res);
+    }
     if (cli.list()) {
       res = Javalings.list(
           cli.hasLongOrShortArg("names") || !cli.hasLongOrShortArg("paths"),

@@ -32,6 +32,11 @@ public class Args {
     Set<String> clargs = new HashSet<>();
 
     for (String arg : args) {
+      if (arg.equals("hint")) {
+        assertNoCommand(command);
+        command = Command.Hint;
+        continue;
+      }
       if (arg.equals("list")) {
         assertNoCommand(command);
         command = Command.List;
@@ -105,11 +110,29 @@ public class Args {
     return this.option == Option.Help;
   }
 
+  public boolean hint() {
+    return this.command == Command.Hint;
+  }
+
   public boolean list() {
     return this.command == Command.List;
   }
 
   public String toString() {
+    if (this.command == Command.Hint) {
+      return String.join(
+          "\n",
+          "Usage: javalings hint <name>",
+          "",
+          "Returns a hint for the given exercise",
+          "",
+          "Positional arguments:",
+          Args.formatCommand("name", "the name of the exercise"),
+          "",
+          "Options:",
+          Args.formatOption("help", "display usage information")
+        );
+    }
     if (this.command == Command.List) {
       return String.join(
           "\n",
@@ -178,6 +201,7 @@ public class Args {
         ),
         Args.formatCommand("watch", "Reruns `run` when files are edited"),
         Args.formatCommand("run", "Runs/Tests a single exercise"),
+        Args.formatCommand("hint", "Returns a hint for the given exercise"),
         Args.formatCommand("list", "Lists the exercises available in Javalings")
       );
   }
@@ -200,6 +224,7 @@ public class Args {
 
   public static enum Command {
     None,
+    Hint,
     List,
     Run,
     Verify,
