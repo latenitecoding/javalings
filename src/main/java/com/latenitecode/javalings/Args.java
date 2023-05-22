@@ -20,7 +20,7 @@ public class Args {
 
     private static String formatOption(String option, String desc) {
         return String.format(
-                "  %-20s %s",
+                "  %-20s%s",
                 String.format("-%s, --%s", option.charAt(0), option),
                 desc
             );
@@ -111,7 +111,11 @@ public class Args {
                 "Javalings is a collection of small exercises to get you used to writing and reading Java code",
                 "",
                 "Options:",
-                String.format("%-20s %s", "  -h, -help, --help", "display usage information")
+                Args.formatOption("version", "show the executable version"),
+                Args.formatOption("help", "display usage information"),
+                "",
+                "Commands:",
+                String.format("  %-20s%s", "list", "Lists the exercises available in Javalings")
             );
     }
 
