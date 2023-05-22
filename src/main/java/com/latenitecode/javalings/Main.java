@@ -60,8 +60,8 @@ public class Main {
         if (cli.list()) {
             System.out.println(
                     Javalings.list(
-                        cli.hasLongOrShortArg("name") || !cli.hasLongOrShortArg("path"),
-                        cli.hasLongOrShortArg("path") || !cli.hasLongOrShortArg("name"),
+                        cli.hasLongOrShortArg("names") || !cli.hasLongOrShortArg("paths"),
+                        cli.hasLongOrShortArg("paths") || !cli.hasLongOrShortArg("names"),
                         (cli.hasLongOrShortArg("unsolved"))
                             ? 'u'
                             : (cli.hasLongOrShortArg("solved"))
