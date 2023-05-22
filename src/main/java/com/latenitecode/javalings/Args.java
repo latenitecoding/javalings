@@ -1,5 +1,8 @@
 package com.latenitecode.javalings;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /** Javalings CLI tool */
 public class Args {
 
@@ -18,6 +21,7 @@ public class Args {
     public static Args parse(String version, String[] args) {
         Command command = Command.None;
         Option option = Option.None;
+        Set<String> clargs = new HashSet<>();
         for (String arg : args) {
             if (arg.equals("list")) {
                 assertNoCommand(command);
@@ -34,18 +38,21 @@ public class Args {
                 option = Option.Version;
                 continue;
             }
+            clargs.add(arg);
         }
-        return new Args(version, command, option);
+        return new Args(version, command, option, clargs);
     }
 
+    private Set<String> args;
     private Command command;
     private Option option;
     private String version;
 
-    private Args(String version, Command command, Option option) {
+    private Args(String version, Command command, Option option, Set<String> args) {
         this.version = version;
         this.command = command;
         this.option = option;
+        this.args = args;
     }
 
     public String getVersion() {
@@ -54,6 +61,15 @@ public class Args {
 
     public boolean empty() {
         return this.command == Command.None && this.option == Option.None;
+    }
+
+    public boolean hasArg(String arg) {
+        return this.args.contains(arg);
+    }
+
+    public boolean hasLongOrShortArg(String arg) {
+        return this.hasArg(String.format("--%s", arg)) ||
+            this.hasArg(String.format("-%s", arg.charAt(0)));
     }
 
     public boolean help() {

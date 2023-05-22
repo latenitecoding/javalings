@@ -58,8 +58,12 @@ public class Javalings {
                 exercises
                     .keySet()
                     .stream()
-                    .map(key -> {
-                        String path = exercises.get(key);
+                    .map(key -> exercises.get(key))
+                    .filter(path -> {
+                        return status == 'a' || status == 'u' && !progress.contains(path)
+                            || status == 's' && progress.contains(path);
+                    })
+                    .map(path -> {
                         StringBuilder builder = new StringBuilder();
                         if (useName) {
                             String name = path
