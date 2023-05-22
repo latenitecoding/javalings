@@ -2,7 +2,7 @@
 // within a special application called the Java Virtual Machine (JVM). This JVM runs as an
 // application under the purview of the OS and can execute Java code. When a Java program is
 // executed by the JVM, the JVM looks for the signature method
-//      `public static void main(String[] args)`
+//    `public static void main(String[] args)`
 // and calls it. Since this is the first method called by the JVM, it is our "entry point". Java
 // programs don't require an entry point, but without one, your application won't do anything when
 // executed. This is common for Java libraries but incorrect for tools and applications.
@@ -15,7 +15,7 @@
 
 public class Intro003 {
 
-    ??? ??? ??? ???(???[] ???) {
-        System.out.println("Hello, World!");
-    }
+  ??? ??? ??? ???(???[] ???) {
+    System.out.println("Hello, World!");
+  }
 }
