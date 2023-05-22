@@ -1,6 +1,9 @@
 # target dir
 target/
 
+# progress
+.progress
+
 # Compiled class file
 *.class
 
