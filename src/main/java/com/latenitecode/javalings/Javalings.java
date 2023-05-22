@@ -37,11 +37,11 @@ public class Javalings {
         }
     }
 
-    public static String list() {
+    public static Result list() {
         return Javalings.list(true, true, 'a');
     }
 
-    public static String list(boolean useName, boolean usePath, char status) {
+    public static Result list(boolean useName, boolean usePath, char status) {
         StringBuilder output = new StringBuilder();
         if (useName) {
             output.append(String.format("%-22s", "Name"));
@@ -87,38 +87,30 @@ public class Javalings {
                     })
                     .collect(Collectors.joining("\n"))
             );
-        return output.toString();
+        return new Result(true, output.toString());
     }
 
-    public static String run(String name) {
+    public static Result run(String name) {
         try {
             boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
             String javac = String.format("javac -d target/exercises exercises/%s.java", name);
             String java = String.format("java -cp target/exercises %s", name);
+
             ProcessBuilder builder = new ProcessBuilder();
             if (isWindows) {
                 builder.command("cmd.exe", "/c", String.format("%s ; %s", javac, java));
             } else {
                 builder.command("bash", "-c", String.format("%s ; %s", javac, java));
             }
+
             Process proc = builder.start();
             int exitCode = proc.waitFor();
             StringBuilder output = new StringBuilder();
-            if (exitCode == 0) {
-                output.append(
-                        new BufferedReader(new InputStreamReader(proc.getInputStream()))
-                            .lines()
-                            .collect(Collectors.joining("\n"))
-                    );
-                output.append("\n\n\033[0;32m");
-                output.append(String.format("\u2705 Successfully ran exercises/%s.java", name));
-                output.append("\033[0m");
-            } else {
-                output.append(
-                        new BufferedReader(new InputStreamReader(proc.getErrorStream()))
-                            .lines()
-                            .collect(Collectors.joining("\n"))
-                    );
+            BufferedReader reader;
+
+            if (exitCode != 0) {
+                reader = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+                output.append(reader.lines().collect(Collectors.joining("\n")));
                 output.append("\n\n\033[0;31m");
                 output.append(
                         String.format(
@@ -127,11 +119,39 @@ public class Javalings {
                         )
                     );
                 output.append("\033[0m");
+                reader.close();
+                return new Result(false, output.toString());
             }
-            return output.toString();
+
+            reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            output.append(reader.lines().collect(Collectors.joining("\n")));
+            output.append("\n\n\033[0;32m");
+            output.append(String.format("\u2705 Successfully ran exercises/%s.java", name));
+            output.append("\033[0m");
+            reader.close();
+            return new Result(true, output.toString());
         } catch (InterruptedException | IOException e) {
             System.err.println(e);
-            return String.format("Unable to run %s", name);
+            return new Result(false, String.format("Unable to run %s", name));
+        }
+    }
+
+    public static class Result {
+        
+        private String msg;
+        private boolean ok;
+
+        public Result(boolean ok, String msg) {
+            this.ok = ok;
+            this.msg = msg;
+        }
+
+        public boolean ok() {
+            return this.ok;
+        }
+
+        public String toString() {
+            return this.msg;
         }
     }
 }
