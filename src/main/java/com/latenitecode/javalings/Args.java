@@ -50,6 +50,11 @@ public class Args {
         command = Command.Verify;
         continue;
       }
+      if (arg.equals("watch")) {
+        assertNoCommand(command);
+        command = Command.Watch;
+        continue;
+      }
       if (arg.equals("-h") || arg.equals("-help") || arg.equals("--help")) {
         assertNoOption(option);
         option = Option.Help;
@@ -179,11 +184,16 @@ public class Args {
     return this.option == Option.Version;
   }
 
+  public boolean watch() {
+    return this.command == Command.Watch;
+  }
+
   public static enum Command {
     None,
     List,
     Run,
-    Verify
+    Verify,
+    Watch
   }
 
   public static enum Option {

@@ -6,8 +6,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.WatchEvent;
+
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.Collection;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -68,6 +75,42 @@ public class Javalings {
         total,
         (double) passing / total
       );
+  }
+
+  private static Result watch(WatchService watcher, WatchKey wk, String exercise) {
+    try {
+      String name = exercise.substring(exercise.lastIndexOf("/") + 1, exercise.lastIndexOf("."));
+
+      Result run = Javalings.run(name);
+      System.out.printf("\n%s\n", run);
+      if (run.ok()) {
+        return run;
+      }
+
+      while (true) {
+        boolean triggered = false;
+        final WatchKey wkEvents = watcher.take();
+        for (WatchEvent<?> event : wkEvents.pollEvents()) {
+          final Path entry = (Path) event.context();
+          if (!entry.endsWith(exercise)) {
+            triggered = true;
+          }
+        }
+
+        if (!triggered) {
+          continue;
+        }
+
+        run = Javalings.run(name);
+        System.out.printf("\n%s\n", run);
+        if (run.ok()) {
+          return run;
+        }
+      }
+    } catch (InterruptedException e) {
+      System.err.println(e);
+      return new Result(false, String.format("Unable to watch %s", exercise));
+    }
   }
 
   public static Result list() {
@@ -188,6 +231,22 @@ public class Javalings {
     } catch (IOException e) {
       System.err.println(e);
       return new Result(false, "Unable to verify exercises");
+    }
+  }
+
+  public static Result watch() {
+    WatchService watcher = null;
+    WatchKey wk = null;
+    try {
+      watcher = FileSystems.getDefault().newWatchService();
+      wk = Paths.get("exercises").register(watcher, ENTRY_MODIFY);
+      for (String exercise : Javalings.getExercises().values()) {
+        Javalings.watch(watcher, wk, exercise);
+      }
+      wk.cancel();
+      return new Result(true, "Congratulations");
+    } catch (IOException e) {
+      return new Result(false, "Unable to complete watch");
     }
   }
 
