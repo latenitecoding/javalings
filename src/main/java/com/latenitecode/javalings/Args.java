@@ -18,6 +18,14 @@ public class Args {
         }
     }
 
+    private static String formatOption(String option, String desc) {
+        return String.format(
+                "  %-20s %s",
+                String.format("-%s, --%s", option.charAt(0), option),
+                desc
+            );
+    }
+
     public static Args parse(String version, String[] args) {
         Command command = Command.None;
         Option option = Option.None;
@@ -81,6 +89,21 @@ public class Args {
     }
 
     public String toString() {
+        if (this.command == Command.List) {
+            return String.join(
+                    "\n",
+                    "Usage: javalings list [-p] [-n] [-u] [-s]",
+                    "",
+                    "Lists the exercises available in Javalings",
+                    "",
+                    "Options:",
+                    Args.formatOption("paths", "show only the paths of the exercises"),
+                    Args.formatOption("names", "show only the names of the exercises"),
+                    Args.formatOption("unsolved", "display only exercises not yet solved"),
+                    Args.formatOption("solved", "display only exercises that have been solved"),
+                    Args.formatOption("help", "display usage information")
+                );
+        }
         return String.join(
                 "\n",
                 "Usage: javalings [-v] [<command>] [<args>]",
