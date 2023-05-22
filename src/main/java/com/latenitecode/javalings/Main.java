@@ -57,31 +57,31 @@ public class Main {
       System.out.println(cli.getVersion());
       System.exit(0);
     }
+    Javalings.Result res = null;
     if (cli.list()) {
-      System.out.println(
-          Javalings.list(
-            cli.hasLongOrShortArg("names") || !cli.hasLongOrShortArg("paths"),
-            cli.hasLongOrShortArg("paths") || !cli.hasLongOrShortArg("names"),
-            (cli.hasLongOrShortArg("unsolved"))
-              ? 'u'
-              : (cli.hasLongOrShortArg("solved"))
-                ? 's'
-                : 'a'
-          )
+      res = Javalings.list(
+          cli.hasLongOrShortArg("names") || !cli.hasLongOrShortArg("paths"),
+          cli.hasLongOrShortArg("paths") || !cli.hasLongOrShortArg("names"),
+          (cli.hasLongOrShortArg("unsolved"))
+            ? 'u'
+            : (cli.hasLongOrShortArg("solved"))
+              ? 's'
+              : 'a'
         );
-      System.exit(0);
+      System.out.println(res);
     }
     if (cli.run()) {
-      System.out.println(Javalings.run(cli.getArgs().iterator().next()));
-      System.exit(0);
+      res = Javalings.run(cli.getArgs().iterator().next());
+      System.out.println(res);
     }
     if (cli.verify()) {
-      System.out.printf("\n%s\n", Javalings.verify(true));
-      System.exit(0);
+      res = Javalings.verify(true);
+      System.out.printf("\n%s\n", res);
     }
     if (cli.watch()) {
-      System.out.println(Javalings.watch());
-      System.exit(0);
+      res = Javalings.watch();
+      System.out.println(res);
     }
+    System.exit((res != null && res.ok()) ? 0 : -1);
   }
 }
