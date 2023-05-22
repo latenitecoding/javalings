@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -35,6 +36,36 @@ public class Javalings {
             System.err.println(e);
             return new TreeSet<>();
         }
+    }
+
+    private static void report(int passing, int total) {
+        StringBuilder progress = new StringBuilder();
+        if (passing > 0) {
+            progress.append("\033[0;32m");
+        }
+        for (int i = 0; i < passing - 1; i++) {
+            progress.append('#');
+        }
+        if (passing > 0) {
+            progress.append('>');
+            progress.append("\033[0m");
+        }
+        if (passing < total) {
+            progress.append("\033[0;31m");
+        }
+        for (int i = passing; i < total; i++) {
+            progress.append('-');
+        }
+        if (passing < total) {
+            progress.append("\033[0m");
+        }
+        System.out.printf(
+                "Progress: [%s] %d/%d (%.1f %%)\n",
+                progress.toString(),
+                passing,
+                total,
+                (double) passing / total
+            );
     }
 
     public static Result list() {
@@ -134,6 +165,24 @@ public class Javalings {
             System.err.println(e);
             return new Result(false, String.format("Unable to run %s", name));
         }
+    }
+
+    public static Result verify(boolean shouldReport) {
+        Collection<String> exercises = Javalings.getExercises().values();
+        int passCount = 0;
+        for (String exercise : exercises) {
+            Result run = Javalings.run(
+                    exercise.substring(exercise.lastIndexOf("/") + 1, exercise.lastIndexOf("."))
+                );
+            if (!run.ok()) {
+                return run;
+            }
+            passCount++;
+            if (shouldReport) {
+                Javalings.report(passCount, exercises.size());
+            }
+        }
+        return new Result(true, "Congratulations!");
     }
 
     public static class Result {

@@ -45,6 +45,11 @@ public class Args {
                 command = Command.Run;
                 continue;
             }
+            if (arg.equals("verify")) {
+                assertNoCommand(command);
+                command = Command.Verify;
+                continue;
+            }
             if (arg.equals("-h") || arg.equals("-help") || arg.equals("--help")) {
                 assertNoOption(option);
                 option = Option.Help;
@@ -151,6 +156,10 @@ public class Args {
         return this.command == Command.Run;
     }
 
+    public boolean verify() {
+        return this.command == Command.Verify;
+    }
+
     public boolean version() {
         return this.option == Option.Version;
     }
@@ -158,7 +167,8 @@ public class Args {
     public static enum Command {
         None,
         List,
-        Run
+        Run,
+        Verify
     }
 
     public static enum Option {
