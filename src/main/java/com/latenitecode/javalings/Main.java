@@ -57,5 +57,9 @@ public class Main {
             System.out.println(cli.getVersion());
             System.exit(0);
         }
+        if (cli.list()) {
+            System.out.println(Javalings.list());
+            System.exit(0);
+        }
     }
 }

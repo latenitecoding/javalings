@@ -60,6 +60,10 @@ public class Args {
         return this.option == Option.Help;
     }
 
+    public boolean list() {
+        return this.command == Command.List;
+    }
+
     public String toString() {
         return String.join(
                 "\n",
