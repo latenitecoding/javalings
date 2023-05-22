@@ -87,27 +87,41 @@ public class Javalings {
         return run;
       }
 
+      BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
       while (true) {
-        boolean triggered = false;
-        final WatchKey wkEvents = watcher.take();
-        for (WatchEvent<?> event : wkEvents.pollEvents()) {
-          final Path entry = (Path) event.context();
-          if (!entry.endsWith(exercise)) {
-            triggered = true;
+        final WatchKey wkEvents = watcher.poll();
+
+        if (wkEvents != null) {
+          boolean triggered = false;
+          for (WatchEvent<?> event : wkEvents.pollEvents()) {
+            final Path entry = (Path) event.context();
+            if (!entry.endsWith(exercise)) {
+              triggered = true;
+            }
+          }
+
+          if (triggered) {
+            run = Javalings.run(name);
+            System.out.printf("\n%s\n", run);
+            if (run.ok()) {
+              reader.close();
+              return run;
+            }
           }
         }
 
-        if (!triggered) {
-          continue;
-        }
-
-        run = Javalings.run(name);
-        System.out.printf("\n%s\n", run);
-        if (run.ok()) {
-          return run;
+        if (reader.ready()) {
+          String cmd = reader.readLine().toLowerCase();
+          if (cmd.equals("hint")) {
+            System.out.println(Javalings.hint(name));
+          } else if (cmd.equals("exit")) {
+            reader.close();
+            return new Result(false, "Watch exited");
+          }
         }
       }
-    } catch (InterruptedException e) {
+    } catch (IOException e) {
       System.err.println(e);
       return new Result(false, String.format("Unable to watch %s", exercise));
     }
@@ -250,7 +264,10 @@ public class Javalings {
       watcher = FileSystems.getDefault().newWatchService();
       wk = Paths.get("exercises").register(watcher, ENTRY_MODIFY);
       for (String exercise : Javalings.getExercises().values()) {
-        Javalings.watch(watcher, wk, exercise);
+        Result res = Javalings.watch(watcher, wk, exercise);
+        if (!res.ok()) {
+          return res;
+        }
       }
       wk.cancel();
       return new Result(true, "Congratulations");
