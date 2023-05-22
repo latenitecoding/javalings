@@ -117,6 +117,20 @@ public class Args {
                     Args.formatOption("help", "display usage information")
                 );
         }
+        if (this.command == Command.Run) {
+            return String.join(
+                    "\n",
+                    "Usage: javalings run <name>",
+                    "",
+                    "Runs/Tests a single exercise",
+                    "",
+                    "Positional arguments:",
+                    Args.formatCommand("name", "the name of the exercise"),
+                    "",
+                    "Options:",
+                    Args.formatOption("help", "display usage information")
+                );
+        }
         return String.join(
                 "\n",
                 "Usage: javalings [-v] [<command>] [<args>]",
