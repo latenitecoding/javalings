@@ -1,10 +1,11 @@
 package com.latenitecode.javalings;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -12,7 +13,8 @@ public class Javalings {
 
     private static TreeMap<String, String> getExercises() {
         TreeMap<String, String> exercises = new TreeMap<>();
-        Stream.of(new File("exercises").listFiles())
+        Stream
+            .of(new File("exercises").listFiles())
             .filter(file -> !file.isDirectory())
             .map(File::getPath)
             .filter(path -> path.contains(".java"))
@@ -22,12 +24,22 @@ public class Javalings {
         return exercises;
     }
 
+    private static TreeSet<String> getProgress() {
+        try {
+            return Files
+                .lines(Path.of(".progress"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        } catch (IOException e) {
+            System.err.println(e);
+            return new TreeSet<>();
+        }
+    }
+
     public static String list() {
         return Javalings.list(true, true, true, 'a');
     }
 
     public static String list(boolean useName, boolean usePath, boolean useStatus, char status) {
-        TreeMap<String, String> exercises = Javalings.getExercises();
         StringBuilder output = new StringBuilder();
         if (useName) {
             output.append(String.format("%-22s", "Name"));
@@ -39,6 +51,9 @@ public class Javalings {
             output.append(String.format("%-8s", "Status"));
         }
         output.append("\n");
+
+        TreeMap<String, String> exercises = Javalings.getExercises();
+        TreeSet<String> progress = Javalings.getProgress();
         output.append(
                 exercises
                     .keySet()
@@ -58,8 +73,13 @@ public class Javalings {
                             builder.append(String.format("%-44s", path));
                         }
                         if (useStatus) {
-                            // TODO: check actual status
-                            builder.append("Not Done");
+                            builder
+                                .append(
+                                    String.format(
+                                        "%-8s",
+                                        (progress.contains(path)) ? "Done" : "Not Done"
+                                    )
+                                );
                         }
                         return builder.toString();
                     })
