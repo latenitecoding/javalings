@@ -23,17 +23,14 @@ public class Args {
   }
 
   private static String formatOption(String option, String desc) {
-    return String.format(
-        "  %-20s%s",
-        String.format("-%s, --%s", option.charAt(0), option),
-        desc
-      );
+    return String.format("  %-20s%s", String.format("-%s, --%s", option.charAt(0), option), desc);
   }
 
   public static Args parse(String version, String[] args) {
     Command command = Command.None;
     Option option = Option.None;
     Set<String> clargs = new HashSet<>();
+
     for (String arg : args) {
       if (arg.equals("list")) {
         assertNoCommand(command);
@@ -67,6 +64,7 @@ public class Args {
       }
       clargs.add(arg);
     }
+
     return new Args(version, command, option, clargs);
   }
 
