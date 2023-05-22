@@ -1,7 +1,9 @@
 package com.latenitecode.javalings;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -168,21 +170,31 @@ public class Javalings {
     }
 
     public static Result verify(boolean shouldReport) {
-        Collection<String> exercises = Javalings.getExercises().values();
-        int passCount = 0;
-        for (String exercise : exercises) {
-            Result run = Javalings.run(
-                    exercise.substring(exercise.lastIndexOf("/") + 1, exercise.lastIndexOf("."))
-                );
-            if (!run.ok()) {
-                return run;
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(".progress"));
+            Collection<String> exercises = Javalings.getExercises().values();
+            int passCount = 0;
+            for (String exercise : exercises) {
+                Result run = Javalings.run(
+                        exercise.substring(exercise.lastIndexOf("/") + 1, exercise.lastIndexOf("."))
+                    );
+                if (!run.ok()) {
+                    writer.close();
+                    return run;
+                }
+                passCount++;
+                writer.write(exercise);
+                writer.flush();
+                if (shouldReport) {
+                    Javalings.report(passCount, exercises.size());
+                }
             }
-            passCount++;
-            if (shouldReport) {
-                Javalings.report(passCount, exercises.size());
-            }
+            writer.close();
+            return new Result(true, "Congratulations!");
+        } catch (IOException e) {
+            System.err.println(e);
+            return new Result(false, "Unable to verify exercises");
         }
-        return new Result(true, "Congratulations!");
     }
 
     public static class Result {
