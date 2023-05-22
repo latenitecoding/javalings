@@ -18,6 +18,10 @@ public class Args {
         }
     }
 
+    private static String formatCommand(String command, String desc) {
+        return String.format("  %-20s%s", command, desc);
+    }
+
     private static String formatOption(String option, String desc) {
         return String.format(
                 "  %-20s%s",
@@ -115,7 +119,8 @@ public class Args {
                 Args.formatOption("help", "display usage information"),
                 "",
                 "Commands:",
-                String.format("  %-20s%s", "list", "Lists the exercises available in Javalings")
+                Args.formatCommand("run", "Runs/Tests a single exercise"),
+                Args.formatCommand("list", "Lists the exercises available in Javalings")
             );
     }
 
