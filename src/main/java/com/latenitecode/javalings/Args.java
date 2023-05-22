@@ -152,6 +152,17 @@ public class Args {
           Args.formatOption("help", "display usage information")
         );
     }
+    if (this.command == Command.Watch) {
+      return String.join(
+          "\n",
+          "Usage: javalings watch",
+          "",
+          "Reruns `run` when files are edited",
+          "",
+          "Options:",
+          Args.formatOption("help", "display usage information")
+        );
+    }
     return String.join(
         "\n",
         "Usage: javalings [-v] [<command>] [<args>]",
@@ -167,6 +178,7 @@ public class Args {
           "verify",
           "Verifies all exercises according to the recommended order"
         ),
+        Args.formatCommand("watch", "Reruns `run` when files are edited"),
         Args.formatCommand("run", "Runs/Tests a single exercise"),
         Args.formatCommand("list", "Lists the exercises available in Javalings")
       );
