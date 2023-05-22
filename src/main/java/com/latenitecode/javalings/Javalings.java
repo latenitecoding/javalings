@@ -26,21 +26,21 @@ public class Javalings {
   private static TreeMap<String, String> getExercises() {
     TreeMap<String, String> exercises = new TreeMap<>();
     Stream
-      .of(new File("exercises").listFiles())
-      .filter(file -> !file.isDirectory())
-      .map(File::getPath)
-      .filter(path -> path.contains(".java"))
-      .forEach(path -> {
-        exercises.put(path.substring(path.length() - 8, path.length() - 5), path);
-      });
+        .of(new File("exercises").listFiles())
+        .filter(file -> !file.isDirectory())
+        .map(File::getPath)
+        .filter(path -> path.contains(".java"))
+        .forEach(path -> {
+          exercises.put(path.substring(path.length() - 8, path.length() - 5), path);
+        });
     return exercises;
   }
 
   private static TreeSet<String> getProgress() {
     try {
       return Files
-        .lines(Path.of(".progress"))
-        .collect(Collectors.toCollection(TreeSet::new));
+          .lines(Path.of(".progress"))
+          .collect(Collectors.toCollection(TreeSet::new));
     } catch (IOException e) {
       System.err.println(e);
       return new TreeSet<>();
@@ -69,12 +69,12 @@ public class Javalings {
       progress.append("\033[0m");
     }
     System.out.printf(
-        "Progress: [%s] %d/%d (%.1f %%)\n",
-        progress.toString(),
-        passing,
-        total,
-        (double) passing / total
-      );
+          "Progress: [%s] %d/%d (%.1f %%)\n",
+          progress.toString(),
+          passing,
+          total,
+          (double) passing / total
+        );
   }
 
   private static Result watch(WatchService watcher, WatchKey wk, String exercise) {
@@ -154,32 +154,30 @@ public class Javalings {
     TreeMap<String, String> exercises = Javalings.getExercises();
     TreeSet<String> progress = Javalings.getProgress();
     output.append(
-        exercises
-          .keySet()
-          .stream()
-          .map(key -> exercises.get(key))
-          .filter(path -> {
-            return status == 'a' || status == 'u' && !progress.contains(path)
-              || status == 's' && progress.contains(path);
-          })
-          .map(path -> {
-            StringBuilder builder = new StringBuilder();
-            if (useName) {
-              String name = path
-                .substring(
-                  path.lastIndexOf('/') + 1,
-                  path.lastIndexOf('.')
-                );
-              builder.append(String.format("%-22s", name));
-            }
-            if (usePath) {
-              builder.append(String.format("%-44s", path));
-            }
-            builder.append(String.format("%-8s", (progress.contains(path)) ? "Done" : "Not Done"));
-            return builder.toString();
-          })
-          .collect(Collectors.joining("\n"))
-      );
+          exercises
+              .keySet()
+              .stream()
+              .map(key -> exercises.get(key))
+              .filter(path -> {
+                return status == 'a' || status == 'u' && !progress.contains(path)
+                    || status == 's' && progress.contains(path);
+              })
+              .map(path -> {
+                StringBuilder builder = new StringBuilder();
+                if (useName) {
+                  String name = path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));
+                  builder.append(String.format("%-22s", name));
+                }
+                if (usePath) {
+                  builder.append(String.format("%-44s", path));
+                }
+                builder.append(
+                      String.format("%-8s", (progress.contains(path)) ? "Done" : "Not Done")
+                    );
+                return builder.toString();
+              })
+              .collect(Collectors.joining("\n"))
+        );
     return new Result(true, output.toString());
   }
 
@@ -206,11 +204,8 @@ public class Javalings {
         output.append(reader.lines().collect(Collectors.joining("\n")));
         output.append("\n\n\033[0;31m");
         output.append(
-            String.format(
-              "\u26A0 Testing of exercises/%s.java failed! Please try again.", 
-              name
-            )
-          );
+              String.format("\u26A0 Testing of exercises/%s.java failed! Please try again.", name)
+            );
         output.append("\033[0m");
         reader.close();
         return new Result(false, output.toString());
@@ -236,8 +231,8 @@ public class Javalings {
       int passCount = 0;
       for (String exercise : exercises) {
         Result run = Javalings.run(
-            exercise.substring(exercise.lastIndexOf("/") + 1, exercise.lastIndexOf("."))
-          );
+              exercise.substring(exercise.lastIndexOf("/") + 1, exercise.lastIndexOf("."))
+            );
         if (!run.ok()) {
           writer.close();
           return run;

@@ -19,11 +19,20 @@ public class Args {
   }
 
   private static String formatCommand(String command, String desc) {
+    if (desc.length() > 58) {
+      return String.format(
+            "  %-20s%s\n%22s%s",
+            command,
+            desc.substring(0, 58),
+            "",
+            desc.substring(58)
+          );
+    }
     return String.format("  %-20s%s", command, desc);
   }
 
   private static String formatOption(String option, String desc) {
-    return String.format("  %-20s%s", String.format("-%s, --%s", option.charAt(0), option), desc);
+    return Args.formatCommand(String.format("-%s, --%s", option.charAt(0), option), desc);
   }
 
   public static Args parse(String version, String[] args) {
@@ -121,89 +130,90 @@ public class Args {
   public String toString() {
     if (this.command == Command.Hint) {
       return String.join(
-          "\n",
-          "Usage: javalings hint <name>",
-          "",
-          "Returns a hint for the given exercise",
-          "",
-          "Positional arguments:",
-          Args.formatCommand("name", "the name of the exercise"),
-          "",
-          "Options:",
-          Args.formatOption("help", "display usage information")
-        );
+            "\n",
+            "Usage: javalings hint <name>",
+            "",
+            "Returns a hint for the given exercise",
+            "",
+            "Positional arguments:",
+            Args.formatCommand("name", "the name of the exercise"),
+            "",
+            "Options:",
+            Args.formatOption("help", "display usage information")
+          );
     }
     if (this.command == Command.List) {
       return String.join(
-          "\n",
-          "Usage: javalings list [-p] [-n] [-u] [-s]",
-          "",
-          "Lists the exercises available in Javalings",
-          "",
-          "Options:",
-          Args.formatOption("paths", "show only the paths of the exercises"),
-          Args.formatOption("names", "show only the names of the exercises"),
-          Args.formatOption("unsolved", "display only exercises not yet solved"),
-          Args.formatOption("solved", "display only exercises that have been solved"),
-          Args.formatOption("help", "display usage information")
-        );
+            "\n",
+            "Usage: javalings list [-p] [-n] [-u] [-s]",
+            "",
+            "Lists the exercises available in Javalings",
+            "",
+            "Options:",
+            Args.formatOption("paths", "show only the paths of the exercises"),
+            Args.formatOption("names", "show only the names of the exercises"),
+            Args.formatOption("unsolved", "display only exercises not yet solved"),
+            Args.formatOption("solved", "display only exercises that have been solved"),
+            Args.formatOption("help", "display usage information")
+          );
     }
     if (this.command == Command.Run) {
       return String.join(
-          "\n",
-          "Usage: javalings run <name>",
-          "",
-          "Runs/Tests a single exercise",
-          "",
-          "Positional arguments:",
-          Args.formatCommand("name", "the name of the exercise"),
-          "",
-          "Options:",
-          Args.formatOption("help", "display usage information")
-        );
+            "\n",
+            "Usage: javalings run <name>",
+            "",
+            "Runs/Tests a single exercise",
+            "",
+            "Positional arguments:",
+            Args.formatCommand("name", "the name of the exercise"),
+            "",
+            "Options:",
+            Args.formatOption("help", "display usage information")
+          );
     }
     if (this.command == Command.Verify) {
       return String.join(
-          "\n",
-          "Usage: javalings verify",
-          "",
-          "Verifies all exercises according to the recommended order",
-          "",
-          "Options:",
-          Args.formatOption("help", "display usage information")
-        );
+            "\n",
+            "Usage: javalings verify",
+            "",
+            "Verifies all exercises according to the recommended order",
+            "",
+            "Options:",
+            Args.formatOption("help", "display usage information")
+          );
     }
     if (this.command == Command.Watch) {
       return String.join(
-          "\n",
-          "Usage: javalings watch",
-          "",
-          "Reruns `run` when files are edited",
-          "",
-          "Options:",
-          Args.formatOption("help", "display usage information")
-        );
+            "\n",
+            "Usage: javalings watch",
+            "",
+            "Reruns `run` when files are edited",
+            "",
+            "Options:",
+            Args.formatOption("help", "display usage information")
+          );
     }
     return String.join(
-        "\n",
-        "Usage: javalings [-v] [<command>] [<args>]",
-        "",
-        "Javalings is a collection of small exercises to get you used to writing and reading Java code",
-        "",
-        "Options:",
-        Args.formatOption("version", "show the executable version"),
-        Args.formatOption("help", "display usage information"),
-        "",
-        "Commands:",
-        Args.formatCommand(
-          "verify",
-          "Verifies all exercises according to the recommended order"
-        ),
-        Args.formatCommand("watch", "Reruns `run` when files are edited"),
-        Args.formatCommand("run", "Runs/Tests a single exercise"),
-        Args.formatCommand("hint", "Returns a hint for the given exercise"),
-        Args.formatCommand("list", "Lists the exercises available in Javalings")
-      );
+          "\n",
+          "Usage: javalings [-v] [<command>] [<args>]",
+          "",
+          "Javalings is a collection of small exercises to get you used to writing and",
+          "reading Java code",
+          "",
+          "Options:",
+          Args.formatOption("version", "show the executable version"),
+          Args.formatOption("help", "display usage information"),
+          "",
+          "Commands:",
+          Args.formatCommand(
+                "verify",
+                "Verifies all exercises according to the recommended order"
+              ),
+          Args.formatCommand("watch", "Reruns `run` when files are edited"),
+          Args.formatCommand("run", "Runs/Tests a single exercise"),
+          Args.formatCommand("hint", "Returns a hint for the given exercise"),
+          Args.formatCommand("list", "Lists the exercises available in Javalings")
+        );
   }
 
   public boolean run() {

@@ -2,6 +2,7 @@
 
 if [[ $(basename $PWD) != "javalings" ]]
 then
+  echo ""
   echo "Hello and"
   echo "       welcome to...                         "
   echo "    _                   _ _                  "
