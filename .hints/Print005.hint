@@ -1,0 +1,5 @@
+The number of % symbols is the number of additional arguments that must be
+passed to `printf`. The format also tells you what type(s) to use. Provide the
+two additional string arguments.
+
+Don't forget the newline (\n) at the end of the format string!
