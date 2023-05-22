@@ -104,17 +104,22 @@ public class Javalings {
             Process proc = builder.start();
             int exitCode = proc.waitFor();
             StringBuilder output = new StringBuilder();
-            output.append(
-                    new BufferedReader(new InputStreamReader(proc.getInputStream()))
-                        .lines()
-                        .collect(Collectors.joining("\n"))
-                );
             if (exitCode == 0) {
-                output.append("\n\033[0;32m");
+                output.append(
+                        new BufferedReader(new InputStreamReader(proc.getInputStream()))
+                            .lines()
+                            .collect(Collectors.joining("\n"))
+                    );
+                output.append("\n\n\033[0;32m");
                 output.append(String.format("\u2705 Successfully ran exercises/%s.java", name));
                 output.append("\033[0m");
             } else {
-                output.append("\n\033[0;31m");
+                output.append(
+                        new BufferedReader(new InputStreamReader(proc.getErrorStream()))
+                            .lines()
+                            .collect(Collectors.joining("\n"))
+                    );
+                output.append("\n\n\033[0;31m");
                 output.append(
                         String.format(
                             "\u26A0 Testing of exercises/%s.java failed! Please try again.", 
