@@ -136,6 +136,17 @@ public class Args {
                     Args.formatOption("help", "display usage information")
                 );
         }
+        if (this.command == Command.Verify) {
+            return String.join(
+                    "\n",
+                    "Usage: javalings verify",
+                    "",
+                    "Verifies all exercises according to the recommended order",
+                    "",
+                    "Options:",
+                    Args.formatOption("help", "display usage information")
+                );
+        }
         return String.join(
                 "\n",
                 "Usage: javalings [-v] [<command>] [<args>]",
@@ -147,6 +158,10 @@ public class Args {
                 Args.formatOption("help", "display usage information"),
                 "",
                 "Commands:",
+                Args.formatCommand(
+                    "verify",
+                    "Verifies all exercises according to the recommended order"
+                ),
                 Args.formatCommand("run", "Runs/Tests a single exercise"),
                 Args.formatCommand("list", "Lists the exercises available in Javalings")
             );
