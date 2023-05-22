@@ -36,10 +36,10 @@ public class Javalings {
     }
 
     public static String list() {
-        return Javalings.list(true, true, true, 'a');
+        return Javalings.list(true, true, 'a');
     }
 
-    public static String list(boolean useName, boolean usePath, boolean useStatus, char status) {
+    public static String list(boolean useName, boolean usePath, char status) {
         StringBuilder output = new StringBuilder();
         if (useName) {
             output.append(String.format("%-22s", "Name"));
@@ -47,9 +47,7 @@ public class Javalings {
         if (usePath) {
             output.append(String.format("%-44s", "Path"));
         }
-        if (useStatus) {
-            output.append(String.format("%-8s", "Status"));
-        }
+        output.append(String.format("%-8s", "Status"));
         output.append("\n");
 
         TreeMap<String, String> exercises = Javalings.getExercises();
@@ -76,15 +74,13 @@ public class Javalings {
                         if (usePath) {
                             builder.append(String.format("%-44s", path));
                         }
-                        if (useStatus) {
-                            builder
-                                .append(
-                                    String.format(
-                                        "%-8s",
-                                        (progress.contains(path)) ? "Done" : "Not Done"
-                                    )
-                                );
-                        }
+                        builder
+                            .append(
+                                String.format(
+                                    "%-8s",
+                                    (progress.contains(path)) ? "Done" : "Not Done"
+                                )
+                            );
                         return builder.toString();
                     })
                     .collect(Collectors.joining("\n"))

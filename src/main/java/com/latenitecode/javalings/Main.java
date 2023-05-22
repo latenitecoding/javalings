@@ -62,7 +62,6 @@ public class Main {
                     Javalings.list(
                         cli.hasLongOrShortArg("name") || !cli.hasLongOrShortArg("path"),
                         cli.hasLongOrShortArg("path") || !cli.hasLongOrShortArg("name"),
-                        true,
                         (cli.hasLongOrShortArg("unsolved"))
                             ? 'u'
                             : (cli.hasLongOrShortArg("solved"))
