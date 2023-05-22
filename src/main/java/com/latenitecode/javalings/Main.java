@@ -71,5 +71,9 @@ public class Main {
                 );
             System.exit(0);
         }
+        if (cli.run()) {
+            System.out.println(Javalings.run(cli.getArgs().iterator().next()));
+            System.exit(0);
+        }
     }
 }

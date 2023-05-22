@@ -40,6 +40,11 @@ public class Args {
                 command = Command.List;
                 continue;
             }
+            if (arg.equals("run")) {
+                assertNoCommand(command);
+                command = Command.Run;
+                continue;
+            }
             if (arg.equals("-h") || arg.equals("-help") || arg.equals("--help")) {
                 assertNoOption(option);
                 option = Option.Help;
@@ -65,6 +70,10 @@ public class Args {
         this.command = command;
         this.option = option;
         this.args = args;
+    }
+
+    public Set<String> getArgs() {
+        return this.args;
     }
 
     public String getVersion() {
@@ -124,13 +133,18 @@ public class Args {
             );
     }
 
+    public boolean run() {
+        return this.command == Command.Run;
+    }
+
     public boolean version() {
         return this.option == Option.Version;
     }
 
     public static enum Command {
         None,
-        List
+        List,
+        Run
     }
 
     public static enum Option {
