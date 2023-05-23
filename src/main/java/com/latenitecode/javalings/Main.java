@@ -66,15 +66,16 @@ public class Main {
       System.out.printf("\n%s", res);
     }
     if (cli.list()) {
-      res = Javalings.list(
-          cli.hasLongOrShortArg("names") || !cli.hasLongOrShortArg("paths"),
-          cli.hasLongOrShortArg("paths") || !cli.hasLongOrShortArg("names"),
-          (cli.hasLongOrShortArg("unsolved"))
-            ? 'u'
-            : (cli.hasLongOrShortArg("solved"))
-              ? 's'
-              : 'a'
-        );
+      res = Javalings
+          .list(
+            cli.hasLongOrShortArg("names") || !cli.hasLongOrShortArg("paths"),
+            cli.hasLongOrShortArg("paths") || !cli.hasLongOrShortArg("names"),
+            (cli.hasLongOrShortArg("unsolved"))
+              ? 'u'
+              : (cli.hasLongOrShortArg("solved"))
+                ? 's'
+                : 'a'
+          );
       System.out.println(res);
     }
     if (cli.run()) {
