@@ -1,0 +1,2 @@
+Variables declared using multi-variable declaration must still follow all of the other rules for
+using variables, such as initialization before use.
