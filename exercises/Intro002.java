@@ -6,9 +6,9 @@
 // Oriented Programming (OOP) paradigm. Languages with a similar focus would include Smalltalk,
 // Eiffel, Scala, Ruby, and Crystal. Some of the other most desired programming languages 
 // mentioned earlier (Python3, JavaScript, C++) permit OOP but are designed around procedural
-// programming. Many more modern languages, such as Rust, Go, TypeScript, Julia, Kotlin, and Dart,
-// take a similar approach. You might hear these languages referred to as "general purpose" or
-// "multi-paradigmatic" languages. Generally speaking (pun intended) these languages are "better"
+// programming. Many more modern languages, such as Rust, Go, TypeScript, Julia, Kotlin, Dart, and
+// OCaml take a similar approach. You might hear these languages referred to as "general purpose"
+// or "multi-paradigmatic" languages. Generally speaking (pun intended) these languages are "better"
 // for programming since they permit developers to employ tools from many different programming
 // paradigms. The choice of whether to choose a more specialized language or a more general
 // language is much like the difference between choosing to be an expert in one field versus
