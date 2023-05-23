@@ -1,0 +1,3 @@
+Ensure that every variable has been declared, that every variable has been
+declared before it is initialized, and that every variable has been initialized
+before it is used.
