@@ -46,12 +46,12 @@
 public class Variables008 {
 
   public static void main(String[] args) {
-    int x; int y; // don't do this in 99% of cases
+    int x; int y; // don't do this
 
     int u, v; // multi-line declaration is preferred
-    u = 1, v = 2; // you can't late assign with the same instruction
+    u = 1, v = 1; // don't break this line
     
-    int n = 10, m = 20; // you can assign as part of a multi-line declaration
+    ??? n = ???, m = ???; // you can assign as part of a multi-line declaration
 
     System.out.printf("m=%d, n=%d, u=%d, v=%d, x=%d, y=%d\n", m, n, u, v, x, y);
   }
