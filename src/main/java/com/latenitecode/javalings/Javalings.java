@@ -212,6 +212,10 @@ public class Javalings {
         return new Result(false, output.toString());
       }
 
+      reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+      System.out.println(reader.lines().collect(Collectors.joining("\n")));
+      reader.close();
+
       boolean flag = Files
           .lines(Path.of(String.format("exercises/%s.java", name)))
           .filter(line -> line.equals("// TODO: I AM NOT DONE"))
@@ -219,7 +223,7 @@ public class Javalings {
           .isPresent();
 
       if (flag) {
-        output.append("\n\033[0;31m");
+        output.append("\033[0;31m");
         output.append(
               String.format(
                     "You can keep working on this exercise `exercises/%s.java`, or jump into the\n",
@@ -227,17 +231,15 @@ public class Javalings {
                   )
             );
         output.append("the next one by removing the TODO comment:\n\n");
-        output.append("\u26A0 // TODO: I AM NOT DONE\n");
+        output.append("\u26A0 // TODO: I AM NOT DONE");
         output.append("\033[0m");
         return new Result(false, output.toString());
       }
 
-      reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-      output.append(reader.lines().collect(Collectors.joining("\n")));
-      output.append("\n\033[0;32m");
+      output.append("\033[0;32m");
       output.append(String.format("\u2705 Successfully ran exercises/%s.java", name));
       output.append("\033[0m");
-      reader.close();
+
       return new Result(true, output.toString());
     } catch (InterruptedException | IOException e) {
       System.err.println(e);
